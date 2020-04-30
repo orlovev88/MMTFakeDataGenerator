@@ -1,2 +1,3 @@
 rootProject.name='RealmFakeDataDemo'
 include ':app'
+include ':fakedatalibrary'

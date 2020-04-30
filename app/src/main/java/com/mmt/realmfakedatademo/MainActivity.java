@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import static com.mmt.fakedatalibrary.util.StartStopService.startFakeDataService;
+import static com.mmt.fakedatalibrary.util.StartStopService.stopFakeDataService;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button mBtnStartService, mBtnStopService;
@@ -22,14 +25,14 @@ public class MainActivity extends AppCompatActivity {
         mBtnStartService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startFakeDataService(MainActivity.this, getApplicationContext());
             }
         });
 
         mBtnStopService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                stopFakeDataService(MainActivity.this, getApplicationContext());
             }
         });
     }
