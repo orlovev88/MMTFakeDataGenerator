@@ -56,20 +56,22 @@ public class MMTfakeSleep {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
-                List<MetricSleep> realmFriends = bgRealm.copyToRealmOrUpdate(list);
-                //RealmList<MetricSleep> realmListFriends = new RealmList<>(realmFriends.toArray(new MetricSleep[list.size()]));
+                List<MetricSleep> realmSleep = bgRealm.copyToRealmOrUpdate(list);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
                 // Transaction was a success.
-                Log.d(TAG, "onSuccess: Data written successfully");
+                Log.d(TAG, "onSuccess: Data written successfully (Fake sleep)");
+                Log.d("toto", "onSuccess: Data written successfully (Fake sleep)");
+
             }
         }, new Realm.Transaction.OnError() {
             @Override
             public void onError(Throwable error) {
                 // Transaction failed and was automatically canceled.
-                Log.d(TAG, "onError: Error occured");
+                Log.d(TAG, "onError: Error occured (Fake sleep)");
+                Log.d("toto", "onError: Error occured (Fake sleep)");
             }
         });
     }
