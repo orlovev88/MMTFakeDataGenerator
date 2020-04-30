@@ -6,32 +6,25 @@ The FakeDataLibrary generates periodically fake metrics (Activity, HRV, PPG, Wor
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
 ### Installing
 
-In build.gradle(Project), add maven { url 'https://jitpack.io' } in allproject :
+Add it in your root build.gradle at the end of repositories:
 
 ```
 allprojects {
     repositories {
-        google()
-        jcenter()
+        ...
         maven { url 'https://jitpack.io' }
     }
 }
 ```
 
-In build.gradle(app), add in dependencies:
+Add the dependency:
 
 ```
-implementation 'com.android.XXX'
+dependencies {
+    implementation 'com.github.maximemmt:MMTFakeDataGenerator:1.0'
+}
 ```
 
 
