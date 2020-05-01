@@ -33,7 +33,7 @@ import io.realm.RealmList;
 import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
 
 public class FakeDataGenerationService extends Service {
-    public static final long PERIOD = 1 * 60 * 1000; // 5 minutes
+    public static long period = 1 * 60 * 1000; // 5 minutes
 
     public static final long ACTIVITY_FREQUENCE_MS = 10 * 1000; // 10 seconds
     public static final long HRV_FREQUENCE_MS      = 1 * 1000;  // 1 second
@@ -95,7 +95,7 @@ public class FakeDataGenerationService extends Service {
             mTimer = new Timer();
         }
 
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, PERIOD);
+        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, period);
     }
 
 
@@ -192,7 +192,7 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricActivity> activityList = new RealmList();
 
-        for(int i=0; i<(PERIOD/ACTIVITY_FREQUENCE_MS); i++)
+        for(int i=0; i<(period/ACTIVITY_FREQUENCE_MS); i++)
         {
             activityList.add(new MetricActivity(lastTimestampActivity, timestampMsToHourIso8601(lastTimestampActivity), randNumber(50,170), randNumber(0,4), randNumber(1,7), randNumber(0,30), randNumber(0,20), 0, randNumber(0, 200), 0));
             lastTimestampActivity+= ACTIVITY_FREQUENCE_MS; // Adding 10 seconds to the timestamp, since each point represents 10 seconds
@@ -236,7 +236,7 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricHRV> hrvList = new RealmList();
 
-        for(int i=0; i<(PERIOD/HRV_FREQUENCE_MS); i++)
+        for(int i=0; i<(period/HRV_FREQUENCE_MS); i++)
         {
             hrvList.add(new MetricHRV(lastTimestampHrv, timestampMsToHourIso8601(lastTimestampHrv), randNumber(400,2000)));
             lastTimestampHrv += HRV_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
@@ -279,7 +279,7 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricPPG> ppgList = new RealmList();
 
-        for(int i=0; i<(PERIOD/PPG_FREQUENCE_MS); i++)
+        for(int i=0; i<(period/PPG_FREQUENCE_MS); i++)
         {
             ppgList.add(new MetricPPG(lastTimestampPpg, timestampMsToHourIso8601(lastTimestampPpg), randNumber(14000,17000), randNumber(240, 270), randNumber(50,170)));
             lastTimestampPpg += PPG_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
@@ -322,7 +322,7 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricWorkout> workoutList = new RealmList();
 
-        for(int i=0; i<(PERIOD/WORKOUT_FREQUENCE_MS); i++)
+        for(int i=0; i<(period/WORKOUT_FREQUENCE_MS); i++)
         {
             workoutList.add(new MetricWorkout(lastTimestampWorkout, timestampMsToHourIso8601(lastTimestampWorkout), randNumber(50,180), randNumber(0, 4), randNumber(0,20), 1, randNumber(0,30), randNumber(0,10), randNumber(0,10), randNumber(0,100), randNumber(0,10)));
             lastTimestampWorkout += WORKOUT_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
@@ -363,7 +363,7 @@ public class FakeDataGenerationService extends Service {
         Date date = new Date();
 
         long timestamp = date.getTime();
-        timestamp -= /*5*60*1000*/PERIOD; // In the fake sleep, we have 924 points (1 point each 30 seconds)
+        timestamp -= /*5*60*1000*/period; // In the fake sleep, we have 924 points (1 point each 30 seconds)
 
         return timestamp;
     }
@@ -453,6 +453,13 @@ public class FakeDataGenerationService extends Service {
         {
             lastTimestampWorkout = lastTimestamp;
         }
+    }
+
+    public static void setFakeDataRefreshPeriodMs(long periodMs)
+    {
+        // The period has to be set in milliseconds
+        Log.d("toto", "FakeDataGenerationService period is now set at " + periodMs + "ms");
+        period = periodMs;
     }
 
 }
