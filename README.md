@@ -23,7 +23,7 @@ Add the dependency:
 
 ```
 dependencies {
-    implementation 'com.github.maximemmt:MMTFakeDataGenerator:1.0'
+    implementation 'com.github.maximemmt:MMTFakeDataGenerator:1.1'
 }
 ```
 
