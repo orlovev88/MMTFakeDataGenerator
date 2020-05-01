@@ -30,6 +30,8 @@ import java.util.TimerTask;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
+
 public class FakeDataGenerationService extends Service {
     public static final long PERIOD = 1 * 60 * 1000; // 5 minutes
 
@@ -188,13 +190,11 @@ public class FakeDataGenerationService extends Service {
         // Activity : every 10 seconds
         Log.d("toto", "Generate fake Activity");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
         RealmList<MetricActivity> activityList = new RealmList();
 
         for(int i=0; i<(PERIOD/ACTIVITY_FREQUENCE_MS); i++)
         {
-            activityList.add(new MetricActivity(lastTimestampActivity, sdf.format(new Date(lastTimestampActivity)), randNumber(50,170), randNumber(0,4), randNumber(1,7), randNumber(0,30), randNumber(0,20), 0, randNumber(0, 200), 0));
+            activityList.add(new MetricActivity(lastTimestampActivity, timestampMsToHourIso8601(lastTimestampActivity), randNumber(50,170), randNumber(0,4), randNumber(1,7), randNumber(0,30), randNumber(0,20), 0, randNumber(0, 200), 0));
             lastTimestampActivity+= ACTIVITY_FREQUENCE_MS; // Adding 10 seconds to the timestamp, since each point represents 10 seconds
         }
 
@@ -234,13 +234,11 @@ public class FakeDataGenerationService extends Service {
         // HRV : every 1 second
         Log.d("toto", "Generate fake HRV");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
         RealmList<MetricHRV> hrvList = new RealmList();
 
         for(int i=0; i<(PERIOD/HRV_FREQUENCE_MS); i++)
         {
-            hrvList.add(new MetricHRV(lastTimestampHrv, sdf.format(new Date(lastTimestampHrv)), randNumber(400,2000)));
+            hrvList.add(new MetricHRV(lastTimestampHrv, timestampMsToHourIso8601(lastTimestampHrv), randNumber(400,2000)));
             lastTimestampHrv += HRV_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
@@ -279,13 +277,11 @@ public class FakeDataGenerationService extends Service {
         // PPG : every 40 ms
         Log.d("toto", "Generate fake PPG");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
-
         RealmList<MetricPPG> ppgList = new RealmList();
 
         for(int i=0; i<(PERIOD/PPG_FREQUENCE_MS); i++)
         {
-            ppgList.add(new MetricPPG(lastTimestampPpg, sdf.format(new Date(lastTimestampPpg)), randNumber(14000,17000), randNumber(240, 270), randNumber(50,170)));
+            ppgList.add(new MetricPPG(lastTimestampPpg, timestampMsToHourIso8601(lastTimestampPpg), randNumber(14000,17000), randNumber(240, 270), randNumber(50,170)));
             lastTimestampPpg += PPG_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
@@ -324,13 +320,11 @@ public class FakeDataGenerationService extends Service {
         // Workout : every 1 second
         Log.d("toto", "Generate fake Workout");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
         RealmList<MetricWorkout> workoutList = new RealmList();
 
         for(int i=0; i<(PERIOD/WORKOUT_FREQUENCE_MS); i++)
         {
-            workoutList.add(new MetricWorkout(lastTimestampWorkout, sdf.format(new Date(lastTimestampWorkout)), randNumber(50,180), randNumber(0, 4), randNumber(0,20), 1, randNumber(0,30), randNumber(0,10), randNumber(0,10), randNumber(0,100), randNumber(0,10)));
+            workoutList.add(new MetricWorkout(lastTimestampWorkout, timestampMsToHourIso8601(lastTimestampWorkout), randNumber(50,180), randNumber(0, 4), randNumber(0,20), 1, randNumber(0,30), randNumber(0,10), randNumber(0,10), randNumber(0,100), randNumber(0,10)));
             lastTimestampWorkout += WORKOUT_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
