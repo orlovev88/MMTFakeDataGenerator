@@ -46,10 +46,10 @@ public class FakeDataGenerationService extends Service {
     private static final int PPG      = 3;
     private static final int WORKOUT  = 4;
 
-    private static final boolean ACTIVITY_ENABLED = true;
-    private static final boolean HRV_ENABLED      = true;
-    private static final boolean PPG_ENABLED      = false;
-    private static final boolean WORKOUT_ENABLED  = false;
+    private static boolean activity_enabled = true;
+    private static boolean hrv_enabled      = true;
+    private static boolean ppg_enabled      = false;
+    private static boolean workout_enabled  = false;
 
     private static int currentMetric = NOTHING; // No metric by default
 
@@ -389,7 +389,7 @@ public class FakeDataGenerationService extends Service {
         {
             case NOTHING:
                 currentMetric = ACTIVITY;
-                if(ACTIVITY_ENABLED)
+                if(activity_enabled)
                 {
                     generateFakeDataActivity();
                 } else {
@@ -399,7 +399,7 @@ public class FakeDataGenerationService extends Service {
 
             case ACTIVITY:
                 currentMetric = HRV;
-                if(HRV_ENABLED)
+                if(hrv_enabled)
                 {
                     generateFakeDataHrv();
                 } else {
@@ -409,7 +409,7 @@ public class FakeDataGenerationService extends Service {
 
             case HRV:
                 currentMetric = PPG;
-                if(PPG_ENABLED)
+                if(ppg_enabled)
                 {
                     generateFakeDataPpg();
                 } else {
@@ -419,7 +419,7 @@ public class FakeDataGenerationService extends Service {
 
             case PPG:
                 currentMetric = WORKOUT;
-                if(WORKOUT_ENABLED)
+                if(workout_enabled)
                 {
                     generateFakeDataWorkout();
                 } else {
@@ -460,6 +460,26 @@ public class FakeDataGenerationService extends Service {
         // The period has to be set in milliseconds
         Log.d("toto", "FakeDataGenerationService period is now set at " + periodMs + "ms");
         period = periodMs;
+    }
+
+    public static void enableActivity(boolean state)
+    {
+        activity_enabled = state;
+    }
+
+    public static void enableHRV(boolean state)
+    {
+        hrv_enabled = state;
+    }
+
+    public static void enablePPG(boolean state)
+    {
+        ppg_enabled = state;
+    }
+
+    public static void enableWorkout(boolean state)
+    {
+        workout_enabled = state;
     }
 
 }
