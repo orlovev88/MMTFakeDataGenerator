@@ -33,7 +33,7 @@ import io.realm.RealmList;
 import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
 
 public class FakeDataGenerationService extends Service {
-    public static long period = 1 * 60 * 1000; // 5 minutes
+    public static long period = 5 * 60 * 1000; // 5 minutes
 
     public static final long ACTIVITY_FREQUENCE_MS = 10 * 1000; // 10 seconds
     public static final long HRV_FREQUENCE_MS      = 1 * 1000;  // 1 second

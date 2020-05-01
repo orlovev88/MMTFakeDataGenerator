@@ -31,21 +31,21 @@ dependencies {
 ### Using the library
 
 The FakeDataLibrary is based on a background service which is periodically called in order to generate fake metric data.
-The period can be set in the FakeDataGenerationService.java:
+The period can be set with the function:
 
 ```
-public static final long PERIOD = 1 * 60 * 1000; // 1 minute
+setFakeDataRefreshPeriodMs(30*1000L); // Set the refresh period to 30 seconds
 ```
-By default, the period is set to 1 minute.
+By default, the period is set to 5 minutes.
 Each minute, the service will be called, and new fake data will be added into the Realm database.
 
-You also have the possibility to choose which metric will be enable (Activity/HRV/PPG/Workout) by setting them to true (metric enabled) in the FakeDataGenerationService.java:
+You also have the possibility to choose which metric will be enabled/disabled (Activity/HRV/PPG/Workout) by calling the following functions with state set to true (metric enabled) or to false (metric disabled):
 
 ```
-private static final boolean ACTIVITY_ENABLED = true;
-private static final boolean HRV_ENABLED      = true;
-private static final boolean PPG_ENABLED      = false;
-private static final boolean WORKOUT_ENABLED  = false;
+enableActivity(state)
+enableHRV(state)
+enablePPG(state)
+enableWorkout(state)
 ```
 By default, only Activity and HRV metric are enabled.
 
