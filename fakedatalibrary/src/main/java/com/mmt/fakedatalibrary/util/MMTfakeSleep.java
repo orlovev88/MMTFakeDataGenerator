@@ -11,6 +11,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
+
 public class MMTfakeSleep {
 
     private static final String TAG = "MMTfakeSleep";
@@ -27,8 +29,8 @@ public class MMTfakeSleep {
 
         for(int i=0; i<924; i++)
         {
-            sleepList.add(new MetricSleep(timestamp, sdf.format(new Date(timestamp * 1000)), fakeSleep[i]));
-            timestamp += 30; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
+            sleepList.add(new MetricSleep(timestamp, timestampMsToHourIso8601(timestamp), fakeSleep[i]));
+            timestamp += 30*1000; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
         saveFakeSleepData(sleepList);
@@ -42,8 +44,8 @@ public class MMTfakeSleep {
         date.setMinutes(40);
         date.setSeconds(0);
 
-        long timestamp = date.getTime()/1000;
-        timestamp -= (924-1)*30; // In the fake sleep, we have 924 points (1 point each 30 seconds)
+        long timestamp = date.getTime();
+        timestamp -= ((924-1)*30)*1000; // In the fake sleep, we have 924 points (1 point each 30 seconds)
 
         return timestamp;
     }
