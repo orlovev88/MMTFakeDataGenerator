@@ -53,6 +53,7 @@ public class FakeDataGenerationService extends Service {
 
     private static int currentMetric = NOTHING; // No metric by default
 
+    private static long lastTimestampGlobal   = 0;
     private static long lastTimestampActivity = 0;
     private static long lastTimestampHrv      = 0;
     private static long lastTimestampPpg      = 0;
@@ -363,7 +364,7 @@ public class FakeDataGenerationService extends Service {
         Date date = new Date();
 
         long timestamp = date.getTime();
-        timestamp -= /*5*60*1000*/period; // In the fake sleep, we have 924 points (1 point each 30 seconds)
+        timestamp -= period;
 
         return timestamp;
     }
@@ -429,6 +430,7 @@ public class FakeDataGenerationService extends Service {
 
             case WORKOUT:
                 currentMetric = NOTHING;
+                lastTimestampGlobal += period; // Update global timestamp
                 break;
         }
     }
@@ -436,20 +438,21 @@ public class FakeDataGenerationService extends Service {
     private void initTimestamps()
     {
         long lastTimestamp = generateTimestamp();
+        lastTimestampGlobal = lastTimestamp;
 
-        if(lastTimestampActivity == 0)
+        if(lastTimestampActivity == 0 && activity_enabled)
         {
             lastTimestampActivity = lastTimestamp;
         }
-        if(lastTimestampHrv == 0)
+        if(lastTimestampHrv == 0 && hrv_enabled)
         {
             lastTimestampHrv = lastTimestamp;
         }
-        if(lastTimestampPpg == 0)
+        if(lastTimestampPpg == 0 && ppg_enabled)
         {
             lastTimestampPpg = lastTimestamp;
         }
-        if(lastTimestampWorkout == 0)
+        if(lastTimestampWorkout == 0 && workout_enabled)
         {
             lastTimestampWorkout = lastTimestamp;
         }
@@ -465,21 +468,45 @@ public class FakeDataGenerationService extends Service {
     public static void enableActivity(boolean state)
     {
         activity_enabled = state;
+
+        if(state == true) {
+            lastTimestampActivity = lastTimestampGlobal;
+        } else {
+            lastTimestampActivity = 0;
+        }
     }
 
     public static void enableHRV(boolean state)
     {
         hrv_enabled = state;
+
+        if(state == true) {
+            lastTimestampHrv = lastTimestampGlobal;
+        } else {
+            lastTimestampHrv = 0;
+        }
     }
 
     public static void enablePPG(boolean state)
     {
         ppg_enabled = state;
+
+        if(state == true) {
+            lastTimestampPpg = lastTimestampGlobal;
+        } else {
+            lastTimestampPpg = 0;
+        }
     }
 
     public static void enableWorkout(boolean state)
     {
         workout_enabled = state;
+
+        if(state == true) {
+            lastTimestampWorkout = lastTimestampGlobal;
+        } else {
+            lastTimestampWorkout = 0;
+        }
     }
 
 }
