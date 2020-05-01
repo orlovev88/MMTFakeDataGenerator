@@ -8,6 +8,12 @@
     android:padding="20dp"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start/Stop the FakeDataGeneratorService:">
+    </TextView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +38,52 @@
         </Button>
 
     </LinearLayout>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Set the parameters of the data generation (only few function are presented in this demo app. The other functions works exactly like these):">
+    </TextView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_set_period"
+        android:text="Set period to 30 seconds">
+    </Button>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_enable_workout"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:text="Enable workout">
+        </Button>
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_disable_workout"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="Disable workout">
+        </Button>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generate a fake sleep (the sleep end will be today at 07:40:00):"
+        android:layout_marginTop="50dp">
+    </TextView>
 
     <Button
         android:layout_width="match_parent"
@@ -39,5 +91,7 @@
         android:id="@+id/button_fake_sleep"
         android:text="Fake a sleep">
     </Button>
+
+
 
 </LinearLayout>
