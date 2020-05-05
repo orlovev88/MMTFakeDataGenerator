@@ -424,4 +424,79 @@ public class RealmFakeData {
                 break;
         }
     }
+
+    public static void deleteRawDataNewerOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, final long timestampMin)
+    {
+        Realm realm;
+        realm = Realm.getDefaultInstance();
+
+        final String TIMESTAMP_FIELD = "timestamp";
+
+        switch(dataTypeEnum)
+        {
+            case ACTIVITY:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricActivity> result = realm.where(MetricActivity.class)
+                                .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampMin)
+                                .findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case HRV:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricHRV> result = realm.where(MetricHRV.class)
+                                .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampMin)
+                                .findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case PPG:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricPPG> result = realm.where(MetricPPG.class)
+                                .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampMin)
+                                .findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case SLEEP:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricSleep> result = realm.where(MetricSleep.class)
+                                .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampMin)
+                                .findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case WORKOUT:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricWorkout> result = realm.where(MetricWorkout.class)
+                                .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampMin)
+                                .findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            default:
+                Log.e("RealmFakeData: deleteRawDataNewerOrEqualToTimestamp", "Bad input parameter");
+                break;
+        }
+    }
 }
