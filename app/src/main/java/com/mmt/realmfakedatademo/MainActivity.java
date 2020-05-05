@@ -1,15 +1,11 @@
 package com.mmt.realmfakedatademo;
 
 
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import static com.mmt.fakedatalibrary.FakeDataGenerationService.enableActivity;
-import static com.mmt.fakedatalibrary.FakeDataGenerationService.enableHRV;
-import static com.mmt.fakedatalibrary.FakeDataGenerationService.enablePPG;
 import static com.mmt.fakedatalibrary.FakeDataGenerationService.enableWorkout;
 import static com.mmt.fakedatalibrary.FakeDataGenerationService.setFakeDataRefreshPeriodMs;
 import static com.mmt.fakedatalibrary.util.MMTfakeSleep.generateFakeSleepData;
@@ -27,6 +23,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         eraseAllRealmDatabase(); // Erase all the data on the memory, to start with a clean database.
+
+        /* Sample code:
+
+        Possible values for dataTypeEnum : ACTIVITY / HRV / PPG / SLEEP / WORKOUT
+
+        Get:
+        RealmResults<MetricSleep> sleepResults = getRawData(SLEEP);
+        RealmResults sleepFilteredResults = getRawDataBetweenTimestamps(SLEEP, 1588629600906L, 1588629840906L);
+        RealmResults sleepOlderResults = getRawDataOlderOrEqualThanTimestamp(SLEEP, 1588629600906L);
+        RealmResults sleepNewerResults = getRawDataNewerOrEqualThanTimestamp(SLEEP, 1588629600906L);
+
+        Delete:
+        deleteRawData(SLEEP);
+        deleteRawDataBetweenTimestamps(SLEEP, 1588629600906L, 1588629840906L);
+        deleteRawDataOlderOrEqualThanTimestamp(SLEEP, 1588629780821L);
+        deleteRawDataNewerOrEqualThanTimestamp(SLEEP, 1588656510924L);
+         */
 
         mBtnStartService = (Button) findViewById(R.id.button_start_service);
         mBtnStopService  = (Button) findViewById(R.id.button_stop_service);
