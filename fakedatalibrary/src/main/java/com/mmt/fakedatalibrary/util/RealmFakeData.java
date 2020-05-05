@@ -1,5 +1,7 @@
 package com.mmt.fakedatalibrary.util;
 
+import android.util.Log;
+
 import com.mmt.fakedatalibrary.models.MetricActivity;
 import com.mmt.fakedatalibrary.models.MetricHRV;
 import com.mmt.fakedatalibrary.models.MetricPPG;
@@ -204,5 +206,67 @@ public class RealmFakeData {
 
         return results;
     }
-    
+
+    public static void deleteRawData(DataTypeEnum dataTypeEnum)
+    {
+        Realm realm;
+        realm = Realm.getDefaultInstance();
+
+        switch(dataTypeEnum)
+        {
+            case ACTIVITY:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricActivity> result = realm.where(MetricActivity.class).findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case HRV:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricHRV> result = realm.where(MetricHRV.class).findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case PPG:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricPPG> result = realm.where(MetricPPG.class).findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case SLEEP:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricSleep> result = realm.where(MetricSleep.class).findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            case WORKOUT:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<MetricWorkout> result = realm.where(MetricWorkout.class).findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+                break;
+
+            default:
+                Log.e("RealmFakeData: deleteRawData", "Bad input parameter");
+                break;
+        }
+    }
 }
