@@ -55,4 +55,58 @@ public class RealmFakeData {
 
         return results;
     }
+
+    public static RealmResults getRawDataBetweenTimestamps(DataTypeEnum dataTypeEnum, long timestampStart, long timestampStop)
+    {
+        Realm realm;
+        realm = Realm.getDefaultInstance();
+        final String TIMESTAMP_FIELD = "timestamp";
+
+        RealmResults results;
+
+        switch(dataTypeEnum)
+        {
+            case ACTIVITY:
+                results = realm.where(MetricActivity.class)
+                        .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampStart)
+                        .lessThanOrEqualTo(TIMESTAMP_FIELD, timestampStop)
+                        .findAll();
+                break;
+
+            case HRV:
+                results = realm.where(MetricHRV.class)
+                        .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampStart)
+                        .lessThanOrEqualTo(TIMESTAMP_FIELD, timestampStop)
+                        .findAll();
+                break;
+
+            case PPG:
+                results = realm.where(MetricPPG.class)
+                        .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampStart)
+                        .lessThanOrEqualTo(TIMESTAMP_FIELD, timestampStop)
+                        .findAll();
+                break;
+
+            case SLEEP:
+                results = realm.where(MetricSleep.class)
+                        .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampStart)
+                        .lessThanOrEqualTo(TIMESTAMP_FIELD, timestampStop)
+                        .findAll();
+                break;
+
+            case WORKOUT:
+                results = realm.where(MetricWorkout.class)
+                        .greaterThanOrEqualTo(TIMESTAMP_FIELD, timestampStart)
+                        .lessThanOrEqualTo(TIMESTAMP_FIELD, timestampStop)
+                        .findAll();
+                break;
+
+            default:
+                results = null;
+                break;
+        }
+
+        return results;
+    }
+    
 }
