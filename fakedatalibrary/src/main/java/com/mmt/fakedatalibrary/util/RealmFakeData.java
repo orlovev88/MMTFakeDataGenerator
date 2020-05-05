@@ -51,6 +51,7 @@ public class RealmFakeData {
                 break;
 
                 default:
+                    Log.e("RealmFakeData: getRawData", "Bad input parameter");
                     results = null;
                     break;
         }
@@ -104,6 +105,7 @@ public class RealmFakeData {
                 break;
 
             default:
+                Log.e("RealmFakeData: getRawDataBetweenTimestamps", "Bad input parameter");
                 results = null;
                 break;
         }
@@ -152,6 +154,7 @@ public class RealmFakeData {
                 break;
 
             default:
+                Log.e("RealmFakeData: getRawDataOlderOrEqualThanTimestamp", "Bad input parameter");
                 results = null;
                 break;
         }
@@ -200,6 +203,7 @@ public class RealmFakeData {
                 break;
 
             default:
+                Log.e("RealmFakeData: getRawDataNewerOrEqualThanTimestamp", "Bad input parameter");
                 results = null;
                 break;
         }
