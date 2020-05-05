@@ -23,7 +23,7 @@ Add the dependency:
 
 ```
 dependencies {
-    implementation 'com.github.maximemmt:MMTFakeDataGenerator:1.1'
+    implementation 'com.github.maximemmt:MMTFakeDataGenerator:2.0'
 }
 ```
 
@@ -72,3 +72,71 @@ To generate a fake sleep, please call this function:
 generateFakeSleepData();
 ```
 The generated sleep is always with the same pattern, and the end date is always the current date at 07:40:00
+
+To get/delete the raw data, it is needed to use a dataTypeEnum, whose possible values are:
+```
+public enum DataTypeEnum {
+        ACTIVITY,
+        HRV,
+        PPG,
+        SLEEP,
+        WORKOUT;
+    }
+```
+
+To get all the data of one of the metrics:
+```
+RealmResults getRawData(DataTypeEnum dataTypeEnum)
+Example:
+RealmResults sleepResults = getRawData(SLEEP);
+```
+
+To get all the data of one metric whose timestamps are between 2 specified timestamps:
+```
+RealmResults getRawDataBetweenTimestamps(DataTypeEnum dataTypeEnum, long timestampStart, long timestampStop)
+Example:
+RealmResults sleepFilteredResults = getRawDataBetweenTimestamps(SLEEP, 1588629600906L, 1588629840906L);
+```
+
+To get all the data of one metric whose timestamps are older or equal than a particular timestamp:
+```
+RealmResults getRawDataOlderOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, long timestampMax)
+Example:
+RealmResults sleepOlderResults = getRawDataOlderOrEqualThanTimestamp(SLEEP, 1588629600906L);
+```
+
+To get all the data of one metric whose timestamps are newer or equal than a particular timestamp:
+```
+RealmResults getRawDataNewerOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, long timestampMin)
+Example:
+RealmResults sleepNewerResults = getRawDataNewerOrEqualThanTimestamp(SLEEP, 1588629600906L);
+```
+
+
+To get all the data of one of the metrics:
+```
+RealmResults deleteRawData(DataTypeEnum dataTypeEnum)
+Example:
+deleteRawData(SLEEP);
+```
+
+To delete all the data of one metric whose timestamps are between 2 specified timestamps:
+```
+void deleteRawDataBetweenTimestamps(DataTypeEnum dataTypeEnum, final long timestampStart, final long timestampStop)
+Example:
+deleteRawDataBetweenTimestamps(SLEEP, 1588629600906L, 1588629840906L);
+```
+
+To delete all the data of one metric whose timestamps are older or equal than a particular timestamp:
+```
+void deleteRawDataOlderOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, final long timestampMax)
+Example:
+deleteRawDataOlderOrEqualThanTimestamp(SLEEP, 1588629780821L);
+```
+
+To delete all the data of one metric whose timestamps are newer or equal than a particular timestamp:
+```
+void deleteRawDataNewerOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, final long timestampMin)
+Example:
+deleteRawDataNewerOrEqualThanTimestamp(SLEEP, 1588656510924L);
+```
