@@ -34,9 +34,12 @@ The FakeDataLibrary is based on a background service which is periodically calle
 The period can be set with the function:
 
 ```
+void setFakeDataRefreshPeriodMs(long periodMs)
+
+Example:
 setFakeDataRefreshPeriodMs(30*1000L); // Set the refresh period to 30 seconds
 ```
-By default, the period is set to 5 minutes.
+By default, the period is set to 5 minutes (it sticks to the functionment of the watch, which sends data every 5 minutes to the app).
 Each minute, the service will be called, and new fake data will be added into the Realm database.
 
 You also have the possibility to choose which metric will be enabled/disabled (Activity/HRV/PPG/Workout) by calling the following functions with state set to true (metric enabled) or to false (metric disabled):
