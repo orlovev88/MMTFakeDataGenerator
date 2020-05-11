@@ -169,3 +169,59 @@ void deleteRawDataNewerOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, final lon
 Example:
 deleteRawDataNewerOrEqualThanTimestamp(SLEEP, 1588656510924L);
 ```
+
+
+### Metric details
+
+
+MetricActivity: it contains all the data dealing with activity:
+```
+timestamp        -> the unix timestamp in milliseconds
+date             -> the date formated with ISO8601
+bpm              -> the heart beat per minute (generated values: from 50 to 170 bpm)
+q                -> the quality factor of the measurment (generated values: from 0 to 4)
+last_steps       -> the last number of steps recorded (generated values: from 1 to 7)
+activity_type    -> the activity type (generated values: from 1 to 7)
+speed            -> the last speed measured (generated values: from 0 to 30 km/h)
+skin_proximity   -> the skin proximity (always 0)
+energy_exp       -> the energy of the expiration (generated values: from 0 to 200)
+respiration_rate -> the respiration rate (always 0)
+```
+
+MetricHRV: it contains the hear rate variability data:
+```
+timestamp -> the unix timestamp in milliseconds
+date      -> the date formated with ISO8601
+beats     -> the heart rate variability (generated values: from 400 to 2000 in milliseconds)
+```
+
+MetricPPG: it contains the raw data of the PPG:
+```
+timestamp -> the unix timestamp in milliseconds
+date      -> the date formated with ISO8601
+ppg       -> the PPG value (from 14'000 to 17'000 without unit)
+acc       -> the euclidean norm of the 3 axis of the accelerometer (from 240 to 270 without unit )
+bpm       -> the last heart beat per minute (generated values: from 50 to 170 bpm)
+```
+
+MetricWorkout: it contains everything dealing with the workouts:
+```
+timestamp        -> the unix timestamp in milliseconds
+date             -> the date formated with ISO8601
+bpm              -> the heart beat per minute (generated values: from 50 to 170 bpm)
+q                -> the quality factor of the measurment (generated values: from 0 to 4)
+last_steps       -> the last number of steps recorded (generated values: from 1 to 7)
+activity_type    -> the activity type (generated values: from 1 to 7)
+speed            -> the last speed measured (generated values: from 0 to 30 km/h)
+energy_exp       -> the energy of the expiration (generated values: from 0 to 10)
+respiration_rate -> the respiration rate (generated values: from 0 to 10)
+vo2_max          -> the maximum expired vo2 (generated values: from 0 to 100)
+cfi              -> the cfi, for development (generated values: from 0 to 10)
+```
+
+MetricSleep: it contains the sleep sessions:
+```
+timestamp  -> the unix timestamp in milliseconds
+date       -> the date formated with ISO8601
+sleepState -> the sleep state. Possible values: Awake=4, RemSleep=3, LightSleep=2, DeepSleep=1, Unspecified=0
+```
