@@ -2,6 +2,7 @@ package com.mmt.fakedatalibrary.util;
 
 import android.util.Log;
 
+import com.mmt.fakedatalibrary.GeneratorModule;
 import com.mmt.fakedatalibrary.models.MetricActivity;
 import com.mmt.fakedatalibrary.models.MetricHRV;
 import com.mmt.fakedatalibrary.models.MetricPPG;
@@ -9,6 +10,7 @@ import com.mmt.fakedatalibrary.models.MetricSleep;
 import com.mmt.fakedatalibrary.models.MetricWorkout;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 public class RealmFakeData {
@@ -21,10 +23,17 @@ public class RealmFakeData {
         WORKOUT;
     }
 
+    private static RealmConfiguration realmConfiguration() {
+        return new RealmConfiguration.Builder()
+                .modules(new GeneratorModule())
+                .name("generator.realm")
+                .build();
+    }
+
     public static RealmResults getRawData(DataTypeEnum dataTypeEnum)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         RealmResults results;
 
@@ -62,7 +71,7 @@ public class RealmFakeData {
     public static RealmResults getRawDataBetweenTimestamps(DataTypeEnum dataTypeEnum, long timestampStart, long timestampStop)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
         final String TIMESTAMP_FIELD = "timestamp";
 
         RealmResults results;
@@ -116,7 +125,7 @@ public class RealmFakeData {
     public static RealmResults getRawDataOlderOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, long timestampMax)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
         final String TIMESTAMP_FIELD = "timestamp";
 
         RealmResults results;
@@ -165,7 +174,7 @@ public class RealmFakeData {
     public static RealmResults getRawDataNewerOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, long timestampMin)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
         final String TIMESTAMP_FIELD = "timestamp";
 
         RealmResults results;
@@ -214,7 +223,7 @@ public class RealmFakeData {
     public static void deleteRawData(DataTypeEnum dataTypeEnum)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         switch(dataTypeEnum)
         {
@@ -277,7 +286,7 @@ public class RealmFakeData {
     public static void deleteRawDataBetweenTimestamps(DataTypeEnum dataTypeEnum, final long timestampStart, final long timestampStop)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         final String TIMESTAMP_FIELD = "timestamp";
 
@@ -357,7 +366,7 @@ public class RealmFakeData {
     public static void deleteRawDataOlderOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, final long timestampMax)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         final String TIMESTAMP_FIELD = "timestamp";
 
@@ -432,7 +441,7 @@ public class RealmFakeData {
     public static void deleteRawDataNewerOrEqualThanTimestamp(DataTypeEnum dataTypeEnum, final long timestampMin)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         final String TIMESTAMP_FIELD = "timestamp";
 

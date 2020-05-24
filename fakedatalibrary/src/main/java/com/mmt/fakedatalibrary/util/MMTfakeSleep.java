@@ -2,6 +2,7 @@ package com.mmt.fakedatalibrary.util;
 
 import android.util.Log;
 
+import com.mmt.fakedatalibrary.GeneratorModule;
 import com.mmt.fakedatalibrary.models.MetricSleep;
 
 import java.text.SimpleDateFormat;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
 import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
@@ -16,6 +18,13 @@ import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
 public class MMTfakeSleep {
 
     private static final String TAG = "MMTfakeSleep";
+
+    private static RealmConfiguration realmConfiguration() {
+        return new RealmConfiguration.Builder()
+                .modules(new GeneratorModule())
+                .name("generator.realm")
+                .build();
+    }
 
     public static void generateFakeSleepData()
     {
@@ -53,7 +62,7 @@ public class MMTfakeSleep {
     private static void saveFakeSleepData(final RealmList<MetricSleep> list)
     {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override

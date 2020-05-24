@@ -28,6 +28,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
 import static com.mmt.fakedatalibrary.util.HourISO8601.timestampMsToHourIso8601;
@@ -36,28 +37,28 @@ public class FakeDataGenerationService extends Service {
     public static long period = 5 * 60 * 1000; // 5 minutes
 
     public static final long ACTIVITY_FREQUENCE_MS = 10 * 1000; // 10 seconds
-    public static final long HRV_FREQUENCE_MS      = 1 * 1000;  // 1 second
-    public static final long PPG_FREQUENCE_MS      = 40;        // 40 ms
-    public static final long WORKOUT_FREQUENCE_MS  = 1*1000;    // 1 second
+    public static final long HRV_FREQUENCE_MS = 1 * 1000;  // 1 second
+    public static final long PPG_FREQUENCE_MS = 40;        // 40 ms
+    public static final long WORKOUT_FREQUENCE_MS = 1 * 1000;    // 1 second
 
-    private static final int NOTHING  = 0;
+    private static final int NOTHING = 0;
     private static final int ACTIVITY = 1;
-    private static final int HRV      = 2;
-    private static final int PPG      = 3;
-    private static final int WORKOUT  = 4;
+    private static final int HRV = 2;
+    private static final int PPG = 3;
+    private static final int WORKOUT = 4;
 
     private static boolean activity_enabled = true;
-    private static boolean hrv_enabled      = true;
-    private static boolean ppg_enabled      = false;
-    private static boolean workout_enabled  = false;
+    private static boolean hrv_enabled = true;
+    private static boolean ppg_enabled = false;
+    private static boolean workout_enabled = false;
 
     private static int currentMetric = NOTHING; // No metric by default
 
-    private static long lastTimestampGlobal   = 0;
+    private static long lastTimestampGlobal = 0;
     private static long lastTimestampActivity = 0;
-    private static long lastTimestampHrv      = 0;
-    private static long lastTimestampPpg      = 0;
-    private static long lastTimestampWorkout  = 0;
+    private static long lastTimestampHrv = 0;
+    private static long lastTimestampPpg = 0;
+    private static long lastTimestampWorkout = 0;
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -69,6 +70,13 @@ public class FakeDataGenerationService extends Service {
     private PowerManager.WakeLock wakeLock = null;
 
     public FakeDataGenerationService() {
+    }
+
+    private static RealmConfiguration realmConfiguration() {
+        return new RealmConfiguration.Builder()
+                .modules(new GeneratorModule())
+                .name("generator.realm")
+                .build();
     }
 
     @Override
@@ -105,14 +113,12 @@ public class FakeDataGenerationService extends Service {
         Log.d("toto", "onDestroy");
 
         // Release CPU:
-        if (wakeLock != null)
-        {
+        if (wakeLock != null) {
             wakeLock.release();
             wakeLock = null;
         }
 
-        if(mTimer != null)
-        {
+        if (mTimer != null) {
             mTimer.cancel();
         }
 
@@ -129,10 +135,8 @@ public class FakeDataGenerationService extends Service {
         Log.d("toto", "onTaskRemoved");
     }
 
-
-    private void startMyOwnForeground(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+    private void startMyOwnForeground() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
             String channelName = "My Background Service";
             NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
@@ -177,8 +181,7 @@ public class FakeDataGenerationService extends Service {
     }
 
     // This function is used to keep the CPU active while the screen is off and the phone is in standby
-    private void keepCpuActive()
-    {
+    private void keepCpuActive() {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "NotifBacklgroundStartStop:Tag");
         wakeLock.acquire();
@@ -193,20 +196,18 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricActivity> activityList = new RealmList();
 
-        for(int i=0; i<(period/ACTIVITY_FREQUENCE_MS); i++)
-        {
-            activityList.add(new MetricActivity(lastTimestampActivity, timestampMsToHourIso8601(lastTimestampActivity), randNumber(50,170), randNumber(0,4), randNumber(1,7), randNumber(0,30), randNumber(0,20), 0, randNumber(0, 200), 0));
-            lastTimestampActivity+= ACTIVITY_FREQUENCE_MS; // Adding 10 seconds to the timestamp, since each point represents 10 seconds
+        for (int i = 0; i < (period / ACTIVITY_FREQUENCE_MS); i++) {
+            activityList.add(new MetricActivity(lastTimestampActivity, timestampMsToHourIso8601(lastTimestampActivity), randNumber(50, 170), randNumber(0, 4), randNumber(1, 7), randNumber(0, 30), randNumber(0, 20), 0, randNumber(0, 200), 0));
+            lastTimestampActivity += ACTIVITY_FREQUENCE_MS; // Adding 10 seconds to the timestamp, since each point represents 10 seconds
         }
 
         saveFakeActivityData(activityList);
     }
 
 
-    private static void saveFakeActivityData(final RealmList<MetricActivity> list)
-    {
+    private static void saveFakeActivityData(final RealmList<MetricActivity> list) {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -237,19 +238,17 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricHRV> hrvList = new RealmList();
 
-        for(int i=0; i<(period/HRV_FREQUENCE_MS); i++)
-        {
-            hrvList.add(new MetricHRV(lastTimestampHrv, timestampMsToHourIso8601(lastTimestampHrv), randNumber(400,2000)));
+        for (int i = 0; i < (period / HRV_FREQUENCE_MS); i++) {
+            hrvList.add(new MetricHRV(lastTimestampHrv, timestampMsToHourIso8601(lastTimestampHrv), randNumber(400, 2000)));
             lastTimestampHrv += HRV_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
         saveFakeHrvData(hrvList);
     }
 
-    private static void saveFakeHrvData(final RealmList<MetricHRV> list)
-    {
+    private static void saveFakeHrvData(final RealmList<MetricHRV> list) {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -280,9 +279,8 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricPPG> ppgList = new RealmList();
 
-        for(int i=0; i<(period/PPG_FREQUENCE_MS); i++)
-        {
-            ppgList.add(new MetricPPG(lastTimestampPpg, timestampMsToHourIso8601(lastTimestampPpg), randNumber(14000,17000), randNumber(240, 270), randNumber(50,170)));
+        for (int i = 0; i < (period / PPG_FREQUENCE_MS); i++) {
+            ppgList.add(new MetricPPG(lastTimestampPpg, timestampMsToHourIso8601(lastTimestampPpg), randNumber(14000, 17000), randNumber(240, 270), randNumber(50, 170)));
             lastTimestampPpg += PPG_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
@@ -290,10 +288,9 @@ public class FakeDataGenerationService extends Service {
     }
 
 
-    private static void saveFakePpgData(final RealmList<MetricPPG> list)
-    {
+    private static void saveFakePpgData(final RealmList<MetricPPG> list) {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -323,19 +320,17 @@ public class FakeDataGenerationService extends Service {
 
         RealmList<MetricWorkout> workoutList = new RealmList();
 
-        for(int i=0; i<(period/WORKOUT_FREQUENCE_MS); i++)
-        {
-            workoutList.add(new MetricWorkout(lastTimestampWorkout, timestampMsToHourIso8601(lastTimestampWorkout), randNumber(50,180), randNumber(0, 4), randNumber(0,20), 1, randNumber(0,30), randNumber(0,10), randNumber(0,10), randNumber(0,100), randNumber(0,10)));
+        for (int i = 0; i < (period / WORKOUT_FREQUENCE_MS); i++) {
+            workoutList.add(new MetricWorkout(lastTimestampWorkout, timestampMsToHourIso8601(lastTimestampWorkout), randNumber(50, 180), randNumber(0, 4), randNumber(0, 20), 1, randNumber(0, 30), randNumber(0, 10), randNumber(0, 10), randNumber(0, 100), randNumber(0, 10)));
             lastTimestampWorkout += WORKOUT_FREQUENCE_MS; // Adding 30 seconds to the timestamp, since each point represents 30 seconds
         }
 
         saveFakeWorkoutData(workoutList);
     }
 
-    private static void saveFakeWorkoutData(final RealmList<MetricWorkout> list)
-    {
+    private static void saveFakeWorkoutData(final RealmList<MetricWorkout> list) {
         Realm realm;
-        realm = Realm.getDefaultInstance();
+        realm = Realm.getInstance(realmConfiguration());
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -359,8 +354,7 @@ public class FakeDataGenerationService extends Service {
         });
     }
 
-    private static long generateTimestamp()
-    {
+    private static long generateTimestamp() {
         Date date = new Date();
 
         long timestamp = date.getTime();
@@ -370,8 +364,7 @@ public class FakeDataGenerationService extends Service {
     }
 
 
-    public static int randNumber(int min, int max)
-    {
+    public static int randNumber(int min, int max) {
         if (min > max || (max - min + 1 > Integer.MAX_VALUE)) {
             throw new IllegalArgumentException("Invalid range");
         }
@@ -380,18 +373,15 @@ public class FakeDataGenerationService extends Service {
     }
 
 
-    private static void goToNextMetric()
-    {
+    private static void goToNextMetric() {
         // The metric will be called in this order : ACTIVITY / HRV / PPG / WORKOUT
         // If one of them is not enabled, it will be skipped, and we will try with the next one.
         // If we are currently on the last metric (WORKOUT), nothing will happen.
 
-        switch (currentMetric)
-        {
+        switch (currentMetric) {
             case NOTHING:
                 currentMetric = ACTIVITY;
-                if(activity_enabled)
-                {
+                if (activity_enabled) {
                     generateFakeDataActivity();
                 } else {
                     goToNextMetric();
@@ -400,8 +390,7 @@ public class FakeDataGenerationService extends Service {
 
             case ACTIVITY:
                 currentMetric = HRV;
-                if(hrv_enabled)
-                {
+                if (hrv_enabled) {
                     generateFakeDataHrv();
                 } else {
                     goToNextMetric();
@@ -410,8 +399,7 @@ public class FakeDataGenerationService extends Service {
 
             case HRV:
                 currentMetric = PPG;
-                if(ppg_enabled)
-                {
+                if (ppg_enabled) {
                     generateFakeDataPpg();
                 } else {
                     goToNextMetric();
@@ -420,8 +408,7 @@ public class FakeDataGenerationService extends Service {
 
             case PPG:
                 currentMetric = WORKOUT;
-                if(workout_enabled)
-                {
+                if (workout_enabled) {
                     generateFakeDataWorkout();
                 } else {
                     goToNextMetric();
@@ -435,74 +422,64 @@ public class FakeDataGenerationService extends Service {
         }
     }
 
-    private void initTimestamps()
-    {
+    private void initTimestamps() {
         long lastTimestamp = generateTimestamp();
         lastTimestampGlobal = lastTimestamp;
 
-        if(lastTimestampActivity == 0 && activity_enabled)
-        {
+        if (lastTimestampActivity == 0 && activity_enabled) {
             lastTimestampActivity = lastTimestamp;
         }
-        if(lastTimestampHrv == 0 && hrv_enabled)
-        {
+        if (lastTimestampHrv == 0 && hrv_enabled) {
             lastTimestampHrv = lastTimestamp;
         }
-        if(lastTimestampPpg == 0 && ppg_enabled)
-        {
+        if (lastTimestampPpg == 0 && ppg_enabled) {
             lastTimestampPpg = lastTimestamp;
         }
-        if(lastTimestampWorkout == 0 && workout_enabled)
-        {
+        if (lastTimestampWorkout == 0 && workout_enabled) {
             lastTimestampWorkout = lastTimestamp;
         }
     }
 
-    public static void setFakeDataRefreshPeriodMs(long periodMs)
-    {
+    public static void setFakeDataRefreshPeriodMs(long periodMs) {
         // The period has to be set in milliseconds
         Log.d("toto", "FakeDataGenerationService period is now set at " + periodMs + "ms");
         period = periodMs;
     }
 
-    public static void enableActivity(boolean state)
-    {
+    public static void enableActivity(boolean state) {
         activity_enabled = state;
 
-        if(state == true) {
+        if (state == true) {
             lastTimestampActivity = lastTimestampGlobal;
         } else {
             lastTimestampActivity = 0;
         }
     }
 
-    public static void enableHRV(boolean state)
-    {
+    public static void enableHRV(boolean state) {
         hrv_enabled = state;
 
-        if(state == true) {
+        if (state == true) {
             lastTimestampHrv = lastTimestampGlobal;
         } else {
             lastTimestampHrv = 0;
         }
     }
 
-    public static void enablePPG(boolean state)
-    {
+    public static void enablePPG(boolean state) {
         ppg_enabled = state;
 
-        if(state == true) {
+        if (state == true) {
             lastTimestampPpg = lastTimestampGlobal;
         } else {
             lastTimestampPpg = 0;
         }
     }
 
-    public static void enableWorkout(boolean state)
-    {
+    public static void enableWorkout(boolean state) {
         workout_enabled = state;
 
-        if(state == true) {
+        if (state == true) {
             lastTimestampWorkout = lastTimestampGlobal;
         } else {
             lastTimestampWorkout = 0;
